@@ -1,13 +1,7 @@
-#define SCALE_N 3
-#define TRANSPOSE_N 3
-#define TRANSPOSE_M 2
-#define MULT_N 3
-#define MULT_P 2
-#define ADD_N 2
 #include <stdio.h>
 
 // m by n matrix + m by n matrix where m and n != 1
-void addMatrices(int m, int n, int result[][ADD_N], int mat1[][ADD_N], int mat2[][ADD_N])
+void addMatrices(int m, int n, int result[m][n], int mat1[m][n], int mat2[m][n])
 {
     for (int i = 0; i < m; i++)
     {
@@ -18,7 +12,7 @@ void addMatrices(int m, int n, int result[][ADD_N], int mat1[][ADD_N], int mat2[
     }
 }
 // C * matrix where C is a constant and matrix is not a column matrix
-void scaleMatrix(int C, int m, int n, int mat[][SCALE_N])
+void scaleMatrix(int C, int m, int n, int mat[m][n])
 {
     for (int i = 0; i < m; i++)
     {
@@ -29,7 +23,7 @@ void scaleMatrix(int C, int m, int n, int mat[][SCALE_N])
     }
 }
 // m by n matrix * n by p matrix where n and p != 1
-void multiplyMatrices(int m, int n, int p, int result[][MULT_P], int mat1[][MULT_N], int mat2[][MULT_P])
+void multiplyMatrices(int m, int n, int p, int result[m][p], int mat1[m][n], int mat2[n][p])
 {
     int dprod = 0;
     for (int i = 0; i < m; i++)
@@ -46,7 +40,7 @@ void multiplyMatrices(int m, int n, int p, int result[][MULT_P], int mat1[][MULT
     }
 }
 // transpose m by n matrix where m and n != 1
-void transposeMatrix(int m, int n, int result[][TRANSPOSE_M], int mat[][TRANSPOSE_N])
+void transposeMatrix(int m, int n, int result[n][m], int mat[m][n])
 {
     for (int i = 0; i < n; i++)
     {
@@ -63,18 +57,12 @@ int main()
     int A[2][2] = {{6,4}, {8,3}};
     int B[2][3] = {{1, 2, 3}, {4, 5, 6}};
     int C[2][3] = {{2, 4, 6}, {1, 3, 5}};
-    // matrices that will hold result of each operation
     int transposeC[3][2];
     int multBC[2][2];
     int D[2][2];
-    // operations
-    // 3 * B
     scaleMatrix(3, 2, 3, B);
-    // C transpose
     transposeMatrix(2, 3, transposeC, C);
-    // multiply B by C transpose
-    multiplyMatrices(2, 3, 3, multBC, B, transposeC);
-    // add A to product
+    multiplyMatrices(2, 3, 2, multBC, B, transposeC);
     addMatrices(2, 2, D, A, multBC);
     // output result to console
     for(int i = 0; i < 2; i++) {
@@ -82,5 +70,5 @@ int main()
             printf("%d ", D[i][j]);
         }
         printf("\n");
-    } 
+    }
 }
